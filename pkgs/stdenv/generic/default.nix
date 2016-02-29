@@ -18,7 +18,7 @@ let lib = import ../../../lib; in lib.makeOverridable (
 
 let
 
-  allowUnfree = config.allowUnfree or false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
+  allowUnfree = true;
 
   whitelist = config.whitelistedLicenses or [];
   blacklist = config.blacklistedLicenses or [];
