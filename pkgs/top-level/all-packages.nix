@@ -2174,6 +2174,10 @@ in
     libtool = darwin.cctools;
   };
 
+  nodejs-6_x = callPackage ../development/web/nodejs/v6.nix {
+    libtool = darwin.cctools;
+  };
+
   nodejs-4_x = callPackage ../development/web/nodejs/v4.nix {
     libtool = darwin.cctools;
   };
