@@ -1,19 +1,14 @@
-{ stdenv, fetchsvn, nettools, libgcrypt, openssl, openresolv, perl, gawk, makeWrapper }:
+{ stdenv, fetchgit, nettools, libgcrypt, openssl, openresolv, perl, gawk, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "vpnc-0.5.3-post-r550";
-  src = fetchsvn {
-    url = "http://svn.unix-ag.uni-kl.de/vpnc";
-    rev = "550";
-    sha256 = "0x4ckfv9lpykwmh28v1kyzz91y1j2v48fi8q5nsawrba4q0wlrls";
+  name = "0.5.3r550-2jnpr1";
+  src = fetchgit {
+    url = "https://github.com/ndpgroup/vpnc.git";
+    rev = "b1243d29e0c00312ead038b04a2cf5e2fa31d740";
+    sha256 = "07nqbds72ixfvzyiw2r1f0vvwrmimbvfai1f0lszynh8sn3d3jba";
   };
 
-  postUnpack = ''
-    mv $sourceRoot/trunk/* $sourceRoot/.
-    rm -r $sourceRoot/{trunk,branches,tags}
-  '';
-
-  patches = [ ./makefile.patch ./no_default_route_when_netmask.patch ];
+  patches = [ ./makefile.patch ./no_default_route_when_netmask.patch ./fortigate.patch ];
 
   # The `etc/vpnc/vpnc-script' script relies on `which' and on
   # `ifconfig' as found in net-tools (not GNU Inetutils).
