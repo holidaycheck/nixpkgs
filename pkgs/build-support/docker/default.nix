@@ -492,6 +492,25 @@ rec {
         # Use the temp folder we've been working on to create a new image.
         mv temp image/$layerID
 
+        currentID=$layerID
+        imageJson=$(cat ${baseJson} | jshon -n "{}" -s layers -i type -n "[]" -i diff_ids -i rootfs -n "[]" -i history)
+        manifestJson=$(echo "[]" | jshon -n "{}" -n "[]" -s "$imageName:$imageTag" -i 0 -i RepoTags -n "[]" -i Layers -i 0)
+        while [[ -n "$currentID" ]]; do
+          layerChecksum=$(sha256sum image/$currentID/layer.tar | cut -d ' ' -f 1)
+          imageJson=$(echo "$imageJson" | jshon -e rootfs -e diff_ids -s "sha256:$layerChecksum" -i 0 -p -p)
+          imageJson=$(echo "$imageJson" | jshon -e history -n "{}" -s "1970-01-01T00:00:01Z" -i created -i 0 -p)
+          manifestJson=$(echo "$manifestJson" | jshon -e 0 -e Layers -s "$currentID/layer.tar" -i 0 -p -p)
+
+          currentID=$(cat image/$currentID/json | (jshon -e parent -u 2>/dev/null || true))
+        done
+
+        imageJsonChecksum=$(echo "$imageJson" | sha256sum | cut -d ' ' -f 1)
+        echo "$imageJson" > "image/$imageJsonChecksum.json"
+
+        manifestJson=$(echo "$manifestJson" | jshon -e 0 -s "$imageJsonChecksum.json" -i Config -p)
+
+        echo "$manifestJson" > "image/manifest.json"
+
         # Store the json under the name image/repositories.
         jshon -n object \
           -n object -s "$layerID" -i "$imageTag" \
