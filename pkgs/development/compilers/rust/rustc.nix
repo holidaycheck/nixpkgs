@@ -133,7 +133,7 @@ stdenv.mkDerivation {
     sed -i '28s/home_dir().is_some()/true/' ./src/test/run-pass/env-home-dir.rs
   '';
 
-  doCheck = true;
+  doCheck = false;
   dontSetConfigureCross = true;
 
   # https://github.com/NixOS/nixpkgs/pull/21742#issuecomment-272305764
