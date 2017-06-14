@@ -8,6 +8,7 @@
 , cython
 , dateutil
 , scipy
+, numpy
 , numexpr
 , pytz
 , xlrd
@@ -41,6 +42,7 @@ in buildPythonPackage rec {
     cython
     dateutil
     scipy
+    numpy
     numexpr
     pytz
     xlrd
