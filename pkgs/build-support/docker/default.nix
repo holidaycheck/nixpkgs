@@ -497,12 +497,12 @@ rec {
           imageJson=$(echo "$imageJson" | jq ".history |= [{\"created\": \"${created}\"}] + .")
           diffId=$(gzip -dc image/$i | sha256sum | cut -d" " -f1)
           imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= [\"sha256:$diffId\"] + .")
-          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= [\"$i\"] + .")
+          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= [\"$i/layer.tar\"] + .")
         done
 
         imageJsonChecksum=$(echo "$imageJson" | sha256sum | cut -d ' ' -f1)
-        echo "$imageJson" > "image/sha256:$imageJsonChecksum"
-        manifestJson=$(echo "$manifestJson" | jq ".[0].Config = \"sha256:$imageJsonChecksum\"")
+        echo "$imageJson" > "image/sha256:$imageJsonChecksum.json"
+        manifestJson=$(echo "$manifestJson" | jq ".[0].Config = \"sha256:$imageJsonChecksum.json\"")
         echo "$manifestJson" > image/manifest.json
 
         # Make the image read-only.
