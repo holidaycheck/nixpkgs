@@ -16483,6 +16483,8 @@ with pkgs;
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
   };
 
+  i3ipc-glib = callPackage ../development/libraries/i3ipc-glib { };
+
   i3-gaps = callPackage ../applications/window-managers/i3/gaps.nix { };
 
   i3blocks = callPackage ../applications/window-managers/i3/blocks.nix { };
@@ -16490,6 +16492,8 @@ with pkgs;
   i3blocks-gaps = callPackage ../applications/window-managers/i3/blocks-gaps.nix { };
 
   i3cat = callPackage ../tools/misc/i3cat { };
+
+  i3-easyfocus = callPackage ../applications/window-managers/i3/i3-easyfocus.nix { };
 
   i3lock = callPackage ../applications/window-managers/i3/lock.nix {
     cairo = cairo.override { xcbSupport = true; };
